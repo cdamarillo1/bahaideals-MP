@@ -1,154 +1,139 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2487.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>BahaiDeals MP Dashboard</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f6f8;color:#1e2d3d;min-height:100vh}
+.shell{max-width:820px;margin:0 auto;padding:16px 12px}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #e2e8f0;flex-wrap:wrap;gap:8px}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-text{font-size:18px;font-weight:700;color:#1e2d3d}
+.logo-text span{color:#56ab2f}
+.header-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tm-badge{font-size:11px;padding:3px 10px;border-radius:20px;background:#e8f5e0;color:#3a7d1e;font-weight:600}
+.refresh-btn{font-size:11px;padding:4px 10px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;color:#64748b;cursor:pointer}
+.last-refresh{font-size:10px;color:#94a3b8;width:100%}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+@media(min-width:480px){.stat-grid{grid-template-columns:repeat(4,1fr)}}
+.stat{background:#fff;border-radius:10px;padding:12px 8px;text-align:center;border:1px solid #e2e8f0}
+.stat-label{font-size:9px;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.stat-val{font-size:20px;font-weight:700;color:#1e2d3d}
+.filter-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.filter-btn{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid #e2e8f0;background:#fff;color:#64748b}
+.filter-btn.active{background:#1e2d3d;color:#fff;border-color:#1e2d3d}
+input[type=text]{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:16px;margin-bottom:12px;background:#fff;-webkit-appearance:none}
+.error{padding:10px 14px;color:#dc2626;font-size:13px;background:#fef2f2;border-radius:8px;margin-bottom:12px}
+.loading{text-align:center;padding:2rem;color:#94a3b8;font-size:14px}
+.mp-block{background:#fff;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:8px;overflow:hidden}
+.mp-header{display:flex;align-items:center;gap:10px;padding:12px;cursor:pointer}
+.av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;background:#f1f5f9;color:#64748b}
+.av-has{background:#e8f5e0;color:#3a7d1e}
+.mp-info-wrap{flex:1;min-width:0}
+.mp-name{font-size:13px;font-weight:600;color:#1e2d3d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-email{font-size:11px;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cnt{font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;background:#e8f5e0;color:#3a7d1e;white-space:nowrap;flex-shrink:0}
+.cnt-none{background:#f1f5f9;color:#94a3b8}
+.chev{font-size:9px;color:#94a3b8;transition:transform .2s;flex-shrink:0;margin-left:4px}
+.chev.open{transform:rotate(90deg)}
+.mp-body{display:none;border-top:1px solid #f1f5f9}
+.mp-body.open{display:block}
+.mp-contact{padding:8px 12px;font-size:12px;color:#64748b;border-bottom:1px solid #f1f5f9;display:flex;flex-direction:column;gap:4px}
+.lead-row{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-bottom:1px solid #f8fafc}
+.lead-row:last-child{border-bottom:none}
+.lead-dot{width:28px;height:28px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#64748b;flex-shrink:0;margin-top:1px}
+.lead-name{font-size:13px;font-weight:600;color:#1e2d3d}
+.lead-meta{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}
+.pill{font-size:10px;padding:2px 7px;border-radius:10px}
+.pill-customer{background:#dbeafe;color:#1d4ed8}
+.pill-signup{background:#e8f5e0;color:#3a7d1e}
+.pill-mp{background:#fef3c7;color:#92400e}
+.pill-stage{background:#f1f5f9;color:#64748b}
+.date-txt{font-size:10px;color:#94a3b8}
+.no-leads{padding:12px;font-size:12px;color:#94a3b8;font-style:italic}
+</style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1">&lt;meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"&gt;</p>
-<p class="p1">&lt;title&gt;BahaiDeals MP Dashboard&lt;/title&gt;</p>
-<p class="p1">&lt;style&gt;</p>
-<p class="p1">*{box-sizing:border-box;margin:0;padding:0}</p>
-<p class="p1">body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f6f8;color:#1e2d3d;min-height:100vh}</p>
-<p class="p1">.shell{max-width:820px;margin:0 auto;padding:16px 12px}</p>
-<p class="p1">.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #e2e8f0;flex-wrap:wrap;gap:8px}</p>
-<p class="p1">.logo{display:flex;align-items:center;gap:8px}</p>
-<p class="p1">.logo-text{font-size:18px;font-weight:700;color:#1e2d3d}</p>
-<p class="p1">.logo-text span{color:#56ab2f}</p>
-<p class="p1">.header-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}</p>
-<p class="p1">.tm-badge{font-size:11px;padding:3px 10px;border-radius:20px;background:#e8f5e0;color:#3a7d1e;font-weight:600}</p>
-<p class="p1">.refresh-btn{font-size:11px;padding:4px 10px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;color:#64748b;cursor:pointer}</p>
-<p class="p1">.last-refresh{font-size:10px;color:#94a3b8;width:100%}</p>
-<p class="p1">.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}</p>
-<p class="p1">@media(min-width:480px){.stat-grid{grid-template-columns:repeat(4,1fr)}}</p>
-<p class="p1">.stat{background:#fff;border-radius:10px;padding:12px 8px;text-align:center;border:1px solid #e2e8f0}</p>
-<p class="p1">.stat-label{font-size:9px;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}</p>
-<p class="p1">.stat-val{font-size:20px;font-weight:700;color:#1e2d3d}</p>
-<p class="p1">.filter-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}</p>
-<p class="p1">.filter-btn{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid #e2e8f0;background:#fff;color:#64748b}</p>
-<p class="p1">.filter-btn.active{background:#1e2d3d;color:#fff;border-color:#1e2d3d}</p>
-<p class="p1">input[type=text]{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:16px;margin-bottom:12px;background:#fff;-webkit-appearance:none}</p>
-<p class="p1">.error{padding:10px 14px;color:#dc2626;font-size:13px;background:#fef2f2;border-radius:8px;margin-bottom:12px}</p>
-<p class="p1">.loading{text-align:center;padding:2rem;color:#94a3b8;font-size:14px}</p>
-<p class="p1">.mp-block{background:#fff;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:8px;overflow:hidden}</p>
-<p class="p1">.mp-header{display:flex;align-items:center;gap:10px;padding:12px;cursor:pointer}</p>
-<p class="p1">.av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;background:#f1f5f9;color:#64748b}</p>
-<p class="p1">.av-has{background:#e8f5e0;color:#3a7d1e}</p>
-<p class="p1">.mp-info-wrap{flex:1;min-width:0}</p>
-<p class="p1">.mp-name{font-size:13px;font-weight:600;color:#1e2d3d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}</p>
-<p class="p1">.mp-email{font-size:11px;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}</p>
-<p class="p1">.cnt{font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;background:#e8f5e0;color:#3a7d1e;white-space:nowrap;flex-shrink:0}</p>
-<p class="p1">.cnt-none{background:#f1f5f9;color:#94a3b8}</p>
-<p class="p1">.chev{font-size:9px;color:#94a3b8;transition:transform .2s;flex-shrink:0;margin-left:4px}</p>
-<p class="p1">.chev.open{transform:rotate(90deg)}</p>
-<p class="p1">.mp-body{display:none;border-top:1px solid #f1f5f9}</p>
-<p class="p1">.mp-body.open{display:block}</p>
-<p class="p1">.mp-contact{padding:8px 12px;font-size:12px;color:#64748b;border-bottom:1px solid #f1f5f9;display:flex;flex-direction:column;gap:4px}</p>
-<p class="p1">.lead-row{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-bottom:1px solid #f8fafc}</p>
-<p class="p1">.lead-row:last-child{border-bottom:none}</p>
-<p class="p1">.lead-dot{width:28px;height:28px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#64748b;flex-shrink:0;margin-top:1px}</p>
-<p class="p1">.lead-name{font-size:13px;font-weight:600;color:#1e2d3d}</p>
-<p class="p1">.lead-meta{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}</p>
-<p class="p1">.pill{font-size:10px;padding:2px 7px;border-radius:10px}</p>
-<p class="p1">.pill-customer{background:#dbeafe;color:#1d4ed8}</p>
-<p class="p1">.pill-signup{background:#e8f5e0;color:#3a7d1e}</p>
-<p class="p1">.pill-mp{background:#fef3c7;color:#92400e}</p>
-<p class="p1">.pill-stage{background:#f1f5f9;color:#64748b}</p>
-<p class="p1">.date-txt{font-size:10px;color:#94a3b8}</p>
-<p class="p1">.no-leads{padding:12px;font-size:12px;color:#94a3b8;font-style:italic}</p>
-<p class="p1">&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1">&lt;div class="shell"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="header"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="logo"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg width="32" height="32" viewBox="0 0 60 60"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;defs&gt;&lt;linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;stop offset="0%" style="stop-color:#a8e063"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;stop offset="100%" style="stop-color:#56ab2f"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/linearGradient&gt;&lt;/defs&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;polygon points="30,8 6,32 54,32" fill="url(#g)"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;rect x="8" y="28" width="10" height="20" rx="2" fill="url(#g)"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;rect x="42" y="28" width="10" height="20" rx="2" fill="url(#g)"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;rect x="22" y="36" width="16" height="12" rx="2" fill="url(#g)"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;rect x="24" y="4" width="12" height="10" rx="2" fill="url(#g)"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="logo-text"&gt;bahai&lt;span&gt;deals&lt;/span&gt;.com&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="header-right"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="refresh-btn" onclick="loadData()"&gt;&amp;#8635; Refresh&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;span class="tm-badge"&gt;TM: Henry Chen&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;span class="last-refresh" id="lastRefresh"&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="error" class="error" style="display:none"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="stat-grid" id="statGrid"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;input type="text" id="search" placeholder="Search MP or lead..." oninput="render()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="filter-row" id="filterRow"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="mpList"&gt;&lt;div class="loading"&gt;Loading...&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p1">&lt;script&gt;</p>
-<p class="p1">const SCRIPT_URL="https://script.google.com/macros/s/AKfycbz5AJnYufkOZQ8fsDk03e07A_sJ61e8NgK30dN0CJq3mQ4gKA0F4BTu5RK3c6ko1UAf/exec";</p>
-<p class="p1">let allMPs=[],allLeads=[],activeFilter="ALL";</p>
-<p class="p1">function ini(n){return n.split(" ").slice(0,2).map(w=&gt;w[0]).join("").toUpperCase()}</p>
-<p class="p1">function tagCls(t){return t==="customer"?"pill-customer":t==="mp"?"pill-mp":"pill-signup"}</p>
-<p class="p1">function leadsFor(tag){return allLeads.filter(l=&gt;(l.mp_tag||"").toUpperCase().trim()===tag.toUpperCase())}</p>
-<p class="p1">function toggle(id){document.getElementById("b_"+id).classList.toggle("open");document.getElementById("c_"+id).classList.toggle("open")}</p>
-<p class="p1">function loadData(){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("error").style.display="none";</p>
-<p class="p1"><span class="Apple-converted-space">  </span>var cb="cb_"+Date.now();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>var script=document.createElement("script");</p>
-<p class="p1"><span class="Apple-converted-space">  </span>var timeout=setTimeout(function(){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("error").textContent="Could not load data.";</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("error").style.display="block";</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("mpList").innerHTML="";</p>
-<p class="p1"><span class="Apple-converted-space">    </span>delete window[cb];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>},8000);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>window[cb]=function(json){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>clearTimeout(timeout);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>script.remove();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>delete window[cb];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(!json.success)return;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>allMPs=json.mps;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>allLeads=json.leads;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("lastRefresh").textContent="Updated "+new Date().toLocaleTimeString();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>render();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>script.src=SCRIPT_URL+"?callback="+cb;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.head.appendChild(script);</p>
-<p class="p1">}</p>
-<p class="p1">function render(){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>var search=document.getElementById("search").value.toLowerCase();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>var withLeads=allMPs.filter(function(mp){return leadsFor(mp.tag).length&gt;0});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("statGrid").innerHTML='&lt;div class="stat"&gt;&lt;div class="stat-label"&gt;Total MPs&lt;/div&gt;&lt;div class="stat-val"&gt;'+allMPs.length+'&lt;/div&gt;&lt;/div&gt;&lt;div class="stat"&gt;&lt;div class="stat-label"&gt;With Leads&lt;/div&gt;&lt;div class="stat-val"&gt;'+withLeads.length+'&lt;/div&gt;&lt;/div&gt;&lt;div class="stat"&gt;&lt;div class="stat-label"&gt;Total Leads&lt;/div&gt;&lt;div class="stat-val"&gt;'+allLeads.length+'&lt;/div&gt;&lt;/div&gt;&lt;div class="stat"&gt;&lt;div class="stat-label"&gt;No Leads&lt;/div&gt;&lt;div class="stat-val"&gt;'+(allMPs.length-withLeads.length)+'&lt;/div&gt;&lt;/div&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("filterRow").innerHTML=[{k:"ALL",label:"All MPs"},{k:"WITH",label:"Has leads"},{k:"WITHOUT",label:"No leads yet"}].map(function(f){return'&lt;div class="filter-btn'+(activeFilter===f.k?" active":"")+'" onclick="activeFilter=\''+f.k+'\';render()"&gt;'+f.label+'&lt;/div&gt;'}).join("");</p>
-<p class="p1"><span class="Apple-converted-space">  </span>var mps=allMPs.filter(function(mp){if(activeFilter==="WITH")return leadsFor(mp.tag).length&gt;0;if(activeFilter==="WITHOUT")return leadsFor(mp.tag).length===0;return true});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(search)mps=mps.filter(function(mp){return mp.name.toLowerCase().includes(search)||(mp.email||"").toLowerCase().includes(search)||leadsFor(mp.tag).some(function(l){return(l.lead_name||"").toLowerCase().includes(search)})});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>mps.sort(function(a,b){return leadsFor(b.tag).length-leadsFor(a.tag).length});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>var html="";</p>
-<p class="p1"><span class="Apple-converted-space">  </span>mps.forEach(function(mp){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>var leads=leadsFor(mp.tag),has=leads.length&gt;0,sid=mp.tag.replace(/[^a-z0-9]/gi,"_");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>html+='&lt;div class="mp-block"&gt;&lt;div class="mp-header" onclick="toggle(\''+sid+'\')"&gt;&lt;div class="av'+(has?" av-has":"")+'"&gt;'+ini(mp.name)+'&lt;/div&gt;&lt;div class="mp-info-wrap"&gt;&lt;div class="mp-name"&gt;'+mp.name+'&lt;/div&gt;&lt;div class="mp-email"&gt;'+mp.email+'&lt;/div&gt;&lt;/div&gt;&lt;span class="cnt'+(has?"":" cnt-none")+'"&gt;'+(has?leads.length+" lead"+(leads.length!==1?"s":""):"no leads")+'&lt;/span&gt;&lt;span class="chev" id="c_'+sid+'"&gt;&amp;#9658;&lt;/span&gt;&lt;/div&gt;&lt;div class="mp-body" id="b_'+sid+'"&gt;&lt;div class="mp-contact"&gt;'+(mp.phone?"&lt;span&gt;"+mp.phone+"&lt;/span&gt;":"")+"&lt;span&gt;"+mp.email+"&lt;/span&gt;&lt;/div&gt;";</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(has){leads.forEach(function(l){html+='&lt;div class="lead-row"&gt;&lt;div class="lead-dot"&gt;'+ini(l.lead_name||"")+'&lt;/div&gt;&lt;div style="flex:1;min-width:0"&gt;&lt;div class="lead-name"&gt;'+l.lead_name+'&lt;/div&gt;&lt;div class="lead-meta"&gt;&lt;span class="pill '+tagCls(l.tag)+'"&gt;'+l.tag+'&lt;/span&gt;&lt;span class="pill pill-stage"&gt;'+l.stage+'&lt;/span&gt;&lt;span class="date-txt"&gt;'+l.date+'&lt;/span&gt;'+(l.notes?'&lt;span class="date-txt"&gt;· '+l.notes+"&lt;/span&gt;":"")+"&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;"})}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>else{html+='&lt;div class="no-leads"&gt;No leads assigned yet&lt;/div&gt;'}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>html+="&lt;/div&gt;&lt;/div&gt;";</p>
-<p class="p1"><span class="Apple-converted-space">  </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("mpList").innerHTML=html||'&lt;div class="loading"&gt;No results found.&lt;/div&gt;';</p>
-<p class="p1">}</p>
-<p class="p1">loadData();</p>
-<p class="p1">setInterval(loadData,60000);</p>
-<p class="p1">&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+<div class="shell">
+  <div class="header">
+    <div class="logo">
+      <svg width="32" height="32" viewBox="0 0 60 60">
+        <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#a8e063"/>
+          <stop offset="100%" style="stop-color:#56ab2f"/>
+        </linearGradient></defs>
+        <polygon points="30,8 6,32 54,32" fill="url(#g)"/>
+        <rect x="8" y="28" width="10" height="20" rx="2" fill="url(#g)"/>
+        <rect x="42" y="28" width="10" height="20" rx="2" fill="url(#g)"/>
+        <rect x="22" y="36" width="16" height="12" rx="2" fill="url(#g)"/>
+        <rect x="24" y="4" width="12" height="10" rx="2" fill="url(#g)"/>
+      </svg>
+      <div class="logo-text">bahai<span>deals</span>.com</div>
+    </div>
+    <div class="header-right">
+      <button class="refresh-btn" onclick="loadData()">&#8635; Refresh</button>
+      <span class="tm-badge">TM: Henry Chen</span>
+      <span class="last-refresh" id="lastRefresh"></span>
+    </div>
+  </div>
+  <div id="error" class="error" style="display:none"></div>
+  <div class="stat-grid" id="statGrid"></div>
+  <input type="text" id="search" placeholder="Search MP or lead..." oninput="render()">
+  <div class="filter-row" id="filterRow"></div>
+  <div id="mpList"><div class="loading">Loading...</div></div>
+</div>
+<script>
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbz5AJnYufkOZQ8fsDk03e07A_sJ61e8NgK30dN0CJq3mQ4gKA0F4BTu5RK3c6ko1UAf/exec";
+let allMPs=[],allLeads=[],activeFilter="ALL";
+function ini(n){return n.split(" ").slice(0,2).map(w=>w[0]).join("").toUpperCase()}
+function tagCls(t){return t==="customer"?"pill-customer":t==="mp"?"pill-mp":"pill-signup"}
+function leadsFor(tag){return allLeads.filter(l=>(l.mp_tag||"").toUpperCase().trim()===tag.toUpperCase())}
+function toggle(id){document.getElementById("b_"+id).classList.toggle("open");document.getElementById("c_"+id).classList.toggle("open")}
+function loadData(){
+  document.getElementById("error").style.display="none";
+  var cb="cb_"+Date.now();
+  var script=document.createElement("script");
+  var timeout=setTimeout(function(){
+    document.getElementById("error").textContent="Could not load data.";
+    document.getElementById("error").style.display="block";
+    document.getElementById("mpList").innerHTML="";
+    delete window[cb];
+  },8000);
+  window[cb]=function(json){
+    clearTimeout(timeout);
+    script.remove();
+    delete window[cb];
+    if(!json.success)return;
+    allMPs=json.mps;
+    allLeads=json.leads;
+    document.getElementById("lastRefresh").textContent="Updated "+new Date().toLocaleTimeString();
+    render();
+  };
+  script.src=SCRIPT_URL+"?callback="+cb;
+  document.head.appendChild(script);
+}
+function render(){
+  var search=document.getElementById("search").value.toLowerCase();
+  var withLeads=allMPs.filter(function(mp){return leadsFor(mp.tag).length>0});
+  document.getElementById("statGrid").innerHTML='<div class="stat"><div class="stat-label">Total MPs</div><div class="stat-val">'+allMPs.length+'</div></div><div class="stat"><div class="stat-label">With Leads</div><div class="stat-val">'+withLeads.length+'</div></div><div class="stat"><div class="stat-label">Total Leads</div><div class="stat-val">'+allLeads.length+'</div></div><div class="stat"><div class="stat-label">No Leads</div><div class="stat-val">'+(allMPs.length-withLeads.length)+'</div></div>';
+  document.getElementById("filterRow").innerHTML=[{k:"ALL",label:"All MPs"},{k:"WITH",label:"Has leads"},{k:"WITHOUT",label:"No leads yet"}].map(function(f){return'<div class="filter-btn'+(activeFilter===f.k?" active":"")+'" onclick="activeFilter=\''+f.k+'\';render()">'+f.label+'</div>'}).join("");
+  var mps=allMPs.filter(function(mp){if(activeFilter==="WITH")return leadsFor(mp.tag).length>0;if(activeFilter==="WITHOUT")return leadsFor(mp.tag).length===0;return true});
+  if(search)mps=mps.filter(function(mp){return mp.name.toLowerCase().includes(search)||(mp.email||"").toLowerCase().includes(search)||leadsFor(mp.tag).some(function(l){return(l.lead_name||"").toLowerCase().includes(search)})});
+  mps.sort(function(a,b){return leadsFor(b.tag).length-leadsFor(a.tag).length});
+  var html="";
+  mps.forEach(function(mp){
+    var leads=leadsFor(mp.tag),has=leads.length>0,sid=mp.tag.replace(/[^a-z0-9]/gi,"_");
+    html+='<div class="mp-block"><div class="mp-header" onclick="toggle(\''+sid+'\')"><div class="av'+(has?" av-has":"")+'">'+ini(mp.name)+'</div><div class="mp-info-wrap"><div class="mp-name">'+mp.name+'</div><div class="mp-email">'+mp.email+'</div></div><span class="cnt'+(has?"":" cnt-none")+'">'+(has?leads.length+" lead"+(leads.length!==1?"s":""):"no leads")+'</span><span class="chev" id="c_'+sid+'">&#9658;</span></div><div class="mp-body" id="b_'+sid+'"><div class="mp-contact">'+(mp.phone?"<span>"+mp.phone+"</span>":"")+"<span>"+mp.email+"</span></div>";
+    if(has){leads.forEach(function(l){html+='<div class="lead-row"><div class="lead-dot">'+ini(l.lead_name||"")+'</div><div style="flex:1;min-width:0"><div class="lead-name">'+l.lead_name+'</div><div class="lead-meta"><span class="pill '+tagCls(l.tag)+'">'+l.tag+'</span><span class="pill pill-stage">'+l.stage+'</span><span class="date-txt">'+l.date+'</span>'+(l.notes?'<span class="date-txt">· '+l.notes+"</span>":"")+"</div></div></div>"})}
+    else{html+='<div class="no-leads">No leads assigned yet</div>'}
+    html+="</div></div>";
+  });
+  document.getElementById("mpList").innerHTML=html||'<div class="loading">No results found.</div>';
+}
+loadData();
+setInterval(loadData,60000);
+</script>
 </body>
 </html>
