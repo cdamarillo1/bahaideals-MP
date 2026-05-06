@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>BahaiDeals MP Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f6f8;color:#1e2d3d;min-height:100vh}
@@ -15,6 +16,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .header-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .tm-badge{font-size:11px;padding:3px 10px;border-radius:20px;background:#e8f5e0;color:#3a7d1e;font-weight:600}
 .refresh-btn{font-size:11px;padding:4px 10px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;color:#64748b;cursor:pointer}
+.export-btn{font-size:11px;padding:4px 10px;border:1px solid #3a7d1e;border-radius:8px;background:#e8f5e0;color:#3a7d1e;cursor:pointer;font-weight:600}
 .last-refresh{font-size:10px;color:#94a3b8;width:100%}
 .stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
 @media(min-width:480px){.stat-grid{grid-template-columns:repeat(4,1fr)}}
@@ -74,6 +76,7 @@ input[type=text]{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9
     </div>
     <div class="header-right">
       <button class="refresh-btn" onclick="loadData()">&#8635; Refresh</button>
+      <button class="export-btn" onclick="exportExcel()">&#8595; Export Excel</button>
       <span class="tm-badge">TM: Henry Chen</span>
       <span class="last-refresh" id="lastRefresh"></span>
     </div>
@@ -92,11 +95,34 @@ function ini(n){return n.split(" ").slice(0,2).map(w=>w[0]).join("").toUpperCase
 function tagCls(t){return t==="customer"?"pill-customer":t==="mp"?"pill-mp":"pill-signup"}
 function leadsFor(tag){return allLeads.filter(l=>(l.mp_tag||"").toUpperCase().trim()===tag.toUpperCase())}
 function toggle(id){document.getElementById("b_"+id).classList.toggle("open");document.getElementById("c_"+id).classList.toggle("open")}
+
+function exportExcel(){
+  if(!allMPs.length&&!allLeads.length){alert("No data to export yet.");return}
+  const wb=XLSX.utils.book_new();
+  const mpRows=[["Tag","Name","Email","Phone","Total Leads"]];
+  allMPs.forEach(function(mp){
+    mpRows.push([mp.tag,mp.name,mp.email,mp.phone,leadsFor(mp.tag).length]);
+  });
+  const mpSheet=XLSX.utils.aoa_to_sheet(mpRows);
+  mpSheet["!cols"]=[{wch:8},{wch:25},{wch:35},{wch:18},{wch:12}];
+  XLSX.utils.book_append_sheet(wb,mpSheet,"MPs");
+  const leadRows=[["Lead Name","MP Tag","MP Name","Tag","Stage","Date","Notes"]];
+  allLeads.forEach(function(l){
+    var mp=allMPs.find(function(m){return m.tag.toUpperCase()===(l.mp_tag||"").toUpperCase().trim()});
+    leadRows.push([l.lead_name,l.mp_tag,mp?mp.name:"",l.tag,l.stage,l.date,l.notes||""]);
+  });
+  const leadSheet=XLSX.utils.aoa_to_sheet(leadRows);
+  leadSheet["!cols"]=[{wch:25},{wch:8},{wch:25},{wch:14},{wch:14},{wch:16},{wch:30}];
+  XLSX.utils.book_append_sheet(wb,leadSheet,"Leads");
+  const date=new Date().toISOString().slice(0,10);
+  XLSX.writeFile(wb,"BahaiDeals_MP_Report_"+date+".xlsx");
+}
+
 async function loadData(){
   document.getElementById("error").style.display="none";
   document.getElementById("mpList").innerHTML="<div class='loading'>Loading...</div>";
   try{
-    const url=PROXY+encodeURIComponent(SCRIPT_URL);
+    const url=PROXY+encodeURIComponent(SCRIPT_URL+"?t="+Date.now());
     const res=await fetch(url);
     const json=await res.json();
     if(!json.success)throw new Error();
