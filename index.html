@@ -19,7 +19,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .export-btn{font-size:11px;padding:4px 10px;border:1px solid #3a7d1e;border-radius:8px;background:#e8f5e0;color:#3a7d1e;cursor:pointer;font-weight:600}
 .last-refresh{font-size:10px;color:#94a3b8;width:100%}
 .stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
-@media(min-width:480px){.stat-grid{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:480px){.stat-grid{grid-template-columns:repeat(5,1fr)}}
 .stat{background:#fff;border-radius:10px;padding:12px 8px;text-align:center;border:1px solid #e2e8f0}
 .stat-label{font-size:9px;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
 .stat-val{font-size:20px;font-weight:700;color:#1e2d3d}
@@ -36,13 +36,22 @@ input[type=text]{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9
 .mp-info-wrap{flex:1;min-width:0}
 .mp-name{font-size:13px;font-weight:600;color:#1e2d3d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mp-email{font-size:11px;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cnt{font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;background:#e8f5e0;color:#3a7d1e;white-space:nowrap;flex-shrink:0}
-.cnt-none{background:#f1f5f9;color:#94a3b8}
+.mp-badges{display:flex;gap:4px;flex-shrink:0;align-items:center}
+.badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:12px;white-space:nowrap}
+.badge-lead{background:#e8f5e0;color:#3a7d1e}
+.badge-aff{background:#dbeafe;color:#1d4ed8}
+.badge-post{background:#ede9fe;color:#6d28d9}
+.badge-none{background:#f1f5f9;color:#94a3b8}
 .chev{font-size:9px;color:#94a3b8;transition:transform .2s;flex-shrink:0;margin-left:4px}
 .chev.open{transform:rotate(90deg)}
 .mp-body{display:none;border-top:1px solid #f1f5f9}
 .mp-body.open{display:block}
 .mp-contact{padding:8px 12px;font-size:12px;color:#64748b;border-bottom:1px solid #f1f5f9;display:flex;flex-direction:column;gap:4px}
+.tab-bar{display:flex;border-bottom:1px solid #e2e8f0}
+.tab-btn{flex:1;padding:8px 4px;font-size:12px;font-weight:500;text-align:center;cursor:pointer;color:#64748b;border-bottom:2px solid transparent;background:none;border-top:none;border-left:none;border-right:none}
+.tab-btn.active{color:#3a7d1e;border-bottom-color:#3a7d1e}
+.tab-content{display:none;padding:0}
+.tab-content.active{display:block}
 .lead-row{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-bottom:1px solid #f8fafc}
 .lead-row:last-child{border-bottom:none}
 .lead-dot{width:28px;height:28px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#64748b;flex-shrink:0;margin-top:1px}
@@ -54,7 +63,16 @@ input[type=text]{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9
 .pill-mp{background:#fef3c7;color:#92400e}
 .pill-stage{background:#f1f5f9;color:#64748b}
 .date-txt{font-size:10px;color:#94a3b8}
-.no-leads{padding:12px;font-size:12px;color:#94a3b8;font-style:italic}
+.aff-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid #f8fafc}
+.aff-row:last-child{border-bottom:none}
+.aff-dot{width:28px;height:28px;border-radius:50%;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#1d4ed8;flex-shrink:0}
+.aff-name{font-size:13px;font-weight:600;color:#1e2d3d}
+.aff-email{font-size:11px;color:#94a3b8;margin-top:2px}
+.post-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid #f8fafc}
+.post-row:last-child{border-bottom:none}
+.post-dot{width:28px;height:28px;border-radius:50%;background:#ede9fe;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.post-date{font-size:13px;font-weight:600;color:#1e2d3d}
+.no-data{padding:12px;font-size:12px;color:#94a3b8;font-style:italic}
 </style>
 </head>
 <body>
@@ -83,38 +101,71 @@ input[type=text]{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9
   </div>
   <div id="error" class="error" style="display:none"></div>
   <div class="stat-grid" id="statGrid"></div>
-  <input type="text" id="search" placeholder="Search MP or lead..." oninput="render()">
+  <input type="text" id="search" placeholder="Search MP, lead, or affiliate..." oninput="render()">
   <div class="filter-row" id="filterRow"></div>
   <div id="mpList"><div class="loading">Loading...</div></div>
 </div>
 <script>
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbz5AJnYufkOZQ8fsDk03e07A_sJ61e8NgK30dN0CJq3mQ4gKA0F4BTu5RK3c6ko1UAf/exec";
 const PROXY="https://corsproxy.io/?";
-let allMPs=[],allLeads=[],activeFilter="ALL";
-function ini(n){return n.split(" ").slice(0,2).map(w=>w[0]).join("").toUpperCase()}
+let allMPs=[],allLeads=[],allAffiliates=[],allPosts=[],activeFilter="ALL";
+
+function ini(n){return n.split(" ").slice(0,2).map(function(w){return w[0]}).join("").toUpperCase()}
 function tagCls(t){return t==="customer"?"pill-customer":t==="mp"?"pill-mp":"pill-signup"}
-function leadsFor(tag){return allLeads.filter(l=>(l.mp_tag||"").toUpperCase().trim()===tag.toUpperCase())}
+function forMP(arr,tag){return arr.filter(function(x){return(x.mp_tag||"").toUpperCase().trim()===tag.toUpperCase()})}
 function toggle(id){document.getElementById("b_"+id).classList.toggle("open");document.getElementById("c_"+id).classList.toggle("open")}
 
-function exportExcel(){
-  if(!allMPs.length&&!allLeads.length){alert("No data to export yet.");return}
-  const wb=XLSX.utils.book_new();
-  const mpRows=[["Tag","Name","Email","Phone","Total Leads"]];
-  allMPs.forEach(function(mp){
-    mpRows.push([mp.tag,mp.name,mp.email,mp.phone,leadsFor(mp.tag).length]);
+function switchTab(sid,tab){
+  ["leads","affiliates","posts"].forEach(function(t){
+    document.getElementById("tc_"+sid+"_"+t).classList.remove("active");
+    document.getElementById("tb_"+sid+"_"+t).classList.remove("active");
   });
-  const mpSheet=XLSX.utils.aoa_to_sheet(mpRows);
-  mpSheet["!cols"]=[{wch:8},{wch:25},{wch:35},{wch:18},{wch:12}];
-  XLSX.utils.book_append_sheet(wb,mpSheet,"MPs");
-  const leadRows=[["Lead Name","MP Tag","MP Name","Tag","Stage","Date","Notes"]];
+  document.getElementById("tc_"+sid+"_"+tab).classList.add("active");
+  document.getElementById("tb_"+sid+"_"+tab).classList.add("active");
+}
+
+function exportExcel(){
+  if(!allMPs.length){alert("No data to export yet.");return}
+  var wb=XLSX.utils.book_new();
+  var mpRows=[["Tag","Name","Email","Phone","Leads","Affiliates","Posts"]];
+  allMPs.forEach(function(mp){
+    mpRows.push([mp.tag,mp.name,mp.email,mp.phone,
+      forMP(allLeads,mp.tag).length,
+      forMP(allAffiliates,mp.tag).length,
+      forMP(allPosts,mp.tag).length]);
+  });
+  var ms=XLSX.utils.aoa_to_sheet(mpRows);
+  ms["!cols"]=[{wch:8},{wch:25},{wch:35},{wch:18},{wch:8},{wch:10},{wch:8}];
+  XLSX.utils.book_append_sheet(wb,ms,"MPs");
+
+  var lRows=[["Lead Name","MP Tag","MP Name","Tag","Stage","Date","Notes"]];
   allLeads.forEach(function(l){
     var mp=allMPs.find(function(m){return m.tag.toUpperCase()===(l.mp_tag||"").toUpperCase().trim()});
-    leadRows.push([l.lead_name,l.mp_tag,mp?mp.name:"",l.tag,l.stage,l.date,l.notes||""]);
+    lRows.push([l.lead_name,l.mp_tag,mp?mp.name:"",l.tag,l.stage,l.date,l.notes||""]);
   });
-  const leadSheet=XLSX.utils.aoa_to_sheet(leadRows);
-  leadSheet["!cols"]=[{wch:25},{wch:8},{wch:25},{wch:14},{wch:14},{wch:16},{wch:30}];
-  XLSX.utils.book_append_sheet(wb,leadSheet,"Leads");
-  const date=new Date().toISOString().slice(0,10);
+  var ls=XLSX.utils.aoa_to_sheet(lRows);
+  ls["!cols"]=[{wch:25},{wch:8},{wch:25},{wch:14},{wch:14},{wch:16},{wch:30}];
+  XLSX.utils.book_append_sheet(wb,ls,"Leads");
+
+  var aRows=[["MP Tag","MP Name","Affiliate Name","Email"]];
+  allAffiliates.forEach(function(a){
+    var mp=allMPs.find(function(m){return m.tag.toUpperCase()===(a.mp_tag||"").toUpperCase().trim()});
+    aRows.push([a.mp_tag,mp?mp.name:"",a.affiliate_name,a.email||""]);
+  });
+  var as=XLSX.utils.aoa_to_sheet(aRows);
+  as["!cols"]=[{wch:8},{wch:25},{wch:25},{wch:35}];
+  XLSX.utils.book_append_sheet(wb,as,"Affiliates");
+
+  var pRows=[["MP Tag","MP Name","Post Date"]];
+  allPosts.forEach(function(p){
+    var mp=allMPs.find(function(m){return m.tag.toUpperCase()===(p.mp_tag||"").toUpperCase().trim()});
+    pRows.push([p.mp_tag,mp?mp.name:"",p.post_date]);
+  });
+  var ps=XLSX.utils.aoa_to_sheet(pRows);
+  ps["!cols"]=[{wch:8},{wch:25},{wch:20}];
+  XLSX.utils.book_append_sheet(wb,ps,"Social Posts");
+
+  var date=new Date().toISOString().slice(0,10);
   XLSX.writeFile(wb,"BahaiDeals_MP_Report_"+date+".xlsx");
 }
 
@@ -122,12 +173,14 @@ async function loadData(){
   document.getElementById("error").style.display="none";
   document.getElementById("mpList").innerHTML="<div class='loading'>Loading...</div>";
   try{
-    const url=PROXY+encodeURIComponent(SCRIPT_URL+"?t="+Date.now());
-    const res=await fetch(url);
-    const json=await res.json();
+    var url=PROXY+encodeURIComponent(SCRIPT_URL+"?t="+Date.now());
+    var res=await fetch(url);
+    var json=await res.json();
     if(!json.success)throw new Error();
     allMPs=json.mps;
     allLeads=json.leads;
+    allAffiliates=json.affiliates||[];
+    allPosts=json.posts||[];
     document.getElementById("lastRefresh").textContent="Updated "+new Date().toLocaleTimeString();
     render();
   }catch(e){
@@ -136,22 +189,115 @@ async function loadData(){
     document.getElementById("mpList").innerHTML="";
   }
 }
+
 function render(){
   var search=document.getElementById("search").value.toLowerCase();
-  var withLeads=allMPs.filter(function(mp){return leadsFor(mp.tag).length>0});
-  document.getElementById("statGrid").innerHTML='<div class="stat"><div class="stat-label">Total MPs</div><div class="stat-val">'+allMPs.length+'</div></div><div class="stat"><div class="stat-label">With Leads</div><div class="stat-val">'+withLeads.length+'</div></div><div class="stat"><div class="stat-label">Total Leads</div><div class="stat-val">'+allLeads.length+'</div></div><div class="stat"><div class="stat-label">No Leads</div><div class="stat-val">'+(allMPs.length-withLeads.length)+'</div></div>';
-  document.getElementById("filterRow").innerHTML=[{k:"ALL",label:"All MPs"},{k:"WITH",label:"Has leads"},{k:"WITHOUT",label:"No leads yet"}].map(function(f){return'<div class="filter-btn'+(activeFilter===f.k?" active":"")+'" onclick="activeFilter=\''+f.k+'\';render()">'+f.label+'</div>'}).join("");
-  var mps=allMPs.filter(function(mp){if(activeFilter==="WITH")return leadsFor(mp.tag).length>0;if(activeFilter==="WITHOUT")return leadsFor(mp.tag).length===0;return true});
-  if(search)mps=mps.filter(function(mp){return mp.name.toLowerCase().includes(search)||(mp.email||"").toLowerCase().includes(search)||leadsFor(mp.tag).some(function(l){return(l.lead_name||"").toLowerCase().includes(search)})});
-  mps.sort(function(a,b){return leadsFor(b.tag).length-leadsFor(a.tag).length});
+  var withLeads=allMPs.filter(function(mp){return forMP(allLeads,mp.tag).length>0});
+
+  document.getElementById("statGrid").innerHTML=
+    '<div class="stat"><div class="stat-label">Total MPs</div><div class="stat-val">'+allMPs.length+'</div></div>'+
+    '<div class="stat"><div class="stat-label">With Leads</div><div class="stat-val">'+withLeads.length+'</div></div>'+
+    '<div class="stat"><div class="stat-label">Total Leads</div><div class="stat-val">'+allLeads.length+'</div></div>'+
+    '<div class="stat"><div class="stat-label">Affiliates</div><div class="stat-val">'+allAffiliates.length+'</div></div>'+
+    '<div class="stat"><div class="stat-label">Posts</div><div class="stat-val">'+allPosts.length+'</div></div>';
+
+  document.getElementById("filterRow").innerHTML=[
+    {k:"ALL",label:"All MPs"},
+    {k:"WITH",label:"Has leads"},
+    {k:"WITHOUT",label:"No leads yet"}
+  ].map(function(f){return'<div class="filter-btn'+(activeFilter===f.k?" active":"")+'" onclick="activeFilter=\''+f.k+'\';render()">'+f.label+'</div>'}).join("");
+
+  var mps=allMPs.filter(function(mp){
+    if(activeFilter==="WITH")return forMP(allLeads,mp.tag).length>0;
+    if(activeFilter==="WITHOUT")return forMP(allLeads,mp.tag).length===0;
+    return true;
+  });
+
+  if(search)mps=mps.filter(function(mp){
+    return mp.name.toLowerCase().includes(search)||
+      (mp.email||"").toLowerCase().includes(search)||
+      forMP(allLeads,mp.tag).some(function(l){return(l.lead_name||"").toLowerCase().includes(search)})||
+      forMP(allAffiliates,mp.tag).some(function(a){return(a.affiliate_name||"").toLowerCase().includes(search)});
+  });
+
+  mps.sort(function(a,b){return forMP(allLeads,b.tag).length-forMP(allLeads,a.tag).length});
+
   var html="";
   mps.forEach(function(mp){
-    var leads=leadsFor(mp.tag),has=leads.length>0,sid=mp.tag.replace(/[^a-z0-9]/gi,"_");
-    html+='<div class="mp-block"><div class="mp-header" onclick="toggle(\''+sid+'\')"><div class="av'+(has?" av-has":"")+'">'+ini(mp.name)+'</div><div class="mp-info-wrap"><div class="mp-name">'+mp.name+'</div><div class="mp-email">'+mp.email+'</div></div><span class="cnt'+(has?"":" cnt-none")+'">'+(has?leads.length+" lead"+(leads.length!==1?"s":""):"no leads")+'</span><span class="chev" id="c_'+sid+'">&#9658;</span></div><div class="mp-body" id="b_'+sid+'"><div class="mp-contact">'+(mp.phone?"<span>"+mp.phone+"</span>":"")+"<span>"+mp.email+"</span></div>";
-    if(has){leads.forEach(function(l){html+='<div class="lead-row"><div class="lead-dot">'+ini(l.lead_name||"")+'</div><div style="flex:1;min-width:0"><div class="lead-name">'+l.lead_name+'</div><div class="lead-meta"><span class="pill '+tagCls(l.tag)+'">'+l.tag+'</span><span class="pill pill-stage">'+l.stage+'</span><span class="date-txt">'+l.date+'</span>'+(l.notes?'<span class="date-txt">· '+l.notes+"</span>":"")+"</div></div></div>"})}
-    else{html+='<div class="no-leads">No leads assigned yet</div>'}
-    html+="</div></div>";
+    var leads=forMP(allLeads,mp.tag);
+    var affs=forMP(allAffiliates,mp.tag);
+    var posts=forMP(allPosts,mp.tag);
+    var hasAny=leads.length>0||affs.length>0||posts.length>0;
+    var sid=mp.tag.replace(/[^a-z0-9]/gi,"_");
+
+    html+='<div class="mp-block">'+
+      '<div class="mp-header" onclick="toggle(\''+sid+'\')">'+
+        '<div class="av'+(hasAny?" av-has":"")+'">'+ini(mp.name)+'</div>'+
+        '<div class="mp-info-wrap">'+
+          '<div class="mp-name">'+mp.name+'</div>'+
+          '<div class="mp-email">'+mp.email+'</div>'+
+        '</div>'+
+        '<div class="mp-badges">'+
+          (leads.length?'<span class="badge badge-lead">'+leads.length+' leads</span>':'')+
+          (affs.length?'<span class="badge badge-aff">'+affs.length+' aff</span>':'')+
+          (posts.length?'<span class="badge badge-post">'+posts.length+' posts</span>':'')+
+          (!hasAny?'<span class="badge badge-none">no activity</span>':'')+
+        '</div>'+
+        '<span class="chev" id="c_'+sid+'">&#9658;</span>'+
+      '</div>'+
+      '<div class="mp-body" id="b_'+sid+'">'+
+        '<div class="mp-contact">'+
+          (mp.phone?'<span>'+mp.phone+'</span>':'')+
+          '<span>'+mp.email+'</span>'+
+        '</div>'+
+        '<div class="tab-bar">'+
+          '<button class="tab-btn active" id="tb_'+sid+'_leads" onclick="switchTab(\''+sid+'\',\'leads\')">Leads ('+leads.length+')</button>'+
+          '<button class="tab-btn" id="tb_'+sid+'_affiliates" onclick="switchTab(\''+sid+'\',\'affiliates\')">Affiliates ('+affs.length+')</button>'+
+          '<button class="tab-btn" id="tb_'+sid+'_posts" onclick="switchTab(\''+sid+'\',\'posts\')">Posts ('+posts.length+')</button>'+
+        '</div>'+
+
+        '<div class="tab-content active" id="tc_'+sid+'_leads">'+
+          (leads.length?leads.map(function(l){
+            return '<div class="lead-row">'+
+              '<div class="lead-dot">'+ini(l.lead_name||"")+'</div>'+
+              '<div style="flex:1;min-width:0">'+
+                '<div class="lead-name">'+l.lead_name+'</div>'+
+                '<div class="lead-meta">'+
+                  '<span class="pill '+tagCls(l.tag)+'">'+l.tag+'</span>'+
+                  '<span class="pill pill-stage">'+l.stage+'</span>'+
+                  '<span class="date-txt">'+l.date+'</span>'+
+                  (l.notes?'<span class="date-txt">· '+l.notes+'</span>':'')+
+                '</div>'+
+              '</div>'+
+            '</div>';
+          }).join(""):'<div class="no-data">No leads yet</div>')+
+        '</div>'+
+
+        '<div class="tab-content" id="tc_'+sid+'_affiliates">'+
+          (affs.length?affs.map(function(a){
+            return '<div class="aff-row">'+
+              '<div class="aff-dot">'+ini(a.affiliate_name||"?")+'</div>'+
+              '<div>'+
+                '<div class="aff-name">'+a.affiliate_name+'</div>'+
+                '<div class="aff-email">'+a.email+'</div>'+
+              '</div>'+
+            '</div>';
+          }).join(""):'<div class="no-data">No affiliates yet</div>')+
+        '</div>'+
+
+        '<div class="tab-content" id="tc_'+sid+'_posts">'+
+          (posts.length?posts.map(function(p){
+            return '<div class="post-row">'+
+              '<div class="post-dot">📅</div>'+
+              '<div class="post-date">'+p.post_date+'</div>'+
+            '</div>';
+          }).join(""):'<div class="no-data">No posts yet</div>')+
+        '</div>'+
+
+      '</div>'+
+    '</div>';
   });
+
   document.getElementById("mpList").innerHTML=html||'<div class="loading">No results found.</div>';
 }
 loadData();
